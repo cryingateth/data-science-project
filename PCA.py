@@ -5,12 +5,12 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 # Read the filtered CSV file
-data = pd.read_csv('Dataset/filtered.csv')
+data = pd.read_csv('Dataset/filtered.csv',index_col=0)
 
 # Define the features and target columns
 features = data.drop(columns=['BRCA_subtype'])
 target = data['BRCA_subtype']
-features = features.iloc[:,1:]
+#eatures = features.iloc[:,1:]
 
 # Identify and print non-numeric feature names
 non_numeric_features = features.select_dtypes(include=['object', 'category'])
