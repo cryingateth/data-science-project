@@ -46,3 +46,13 @@ accuracy_random_forest = accuracy_score(y_test, y_pred_random_forest)
 
 print(f'Accuracy of logistic regression: {accuracy_log_reg:.2f}')
 print(f'Accuracy of random forest classifier: {accuracy_random_forest:.2f}')
+
+# Print some predictions using logistic regression
+print("Predictions using logistic regression:")
+print("True labels: ", list(y_test[:15]))
+print("Predicted labels: ", list(y_pred_log_reg[:15]))
+
+# Print some predictions using random forest
+print("\nPredictions using random forest:")
+print("True labels: ", list(y_test[:15]))
+print("Predicted labels: ", list(y_pred_random_forest[:15]))
