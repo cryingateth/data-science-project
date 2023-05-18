@@ -27,6 +27,12 @@ X_train, X_test, y_train, y_test = train_test_split(scaled_features, target, tes
 # List of kernels
 kernels = ['linear', 'poly', 'rbf']
 
+import seaborn as sns
+from sklearn.metrics import confusion_matrix, classification_report
+
+# List of kernels
+kernels = ['linear', 'poly', 'rbf']
+
 # Loop over the list of kernels
 for kernel in kernels:
     # Train the SVM with the given kernel
@@ -40,4 +46,19 @@ for kernel in kernels:
     accuracy = accuracy_score(y_test, y_pred)
 
     print(f"Model accuracy with {kernel} kernel: {accuracy * 100}%")
+
+    # Create a confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    # Display the confusion matrix
+    plt.figure(figsize=(8, 8))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+    plt.title(f'Confusion matrix with {kernel} kernel')
+    plt.ylabel('Actual')
+    plt.xlabel('Predicted')
+    plt.show()
+
+    # Print the classification report
+    print(classification_report(y_test, y_pred))
+
 
