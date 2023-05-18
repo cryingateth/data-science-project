@@ -5,7 +5,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import seaborn as sns
 
 # Read the filtered CSV file
 data = pd.read_csv('Dataset/filtered.csv')
@@ -47,12 +48,22 @@ accuracy_random_forest = accuracy_score(y_test, y_pred_random_forest)
 print(f'Accuracy of logistic regression: {accuracy_log_reg:.2f}')
 print(f'Accuracy of random forest classifier: {accuracy_random_forest:.2f}')
 
-# Print some predictions using logistic regression
-print("Predictions using logistic regression:")
-print("True labels: ", list(y_test[:15]))
-print("Predicted labels: ", list(y_pred_log_reg[:15]))
+# Print Confusion matrix and classification report for Logistic Regression
+cm = confusion_matrix(y_test, y_pred_log_reg)
+plt.figure(figsize=(8, 8))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.title('Confusion matrix of the Logistic Regression classifier')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+plt.show()
+print(classification_report(y_test, y_pred_log_reg))
 
-# Print some predictions using random forest
-print("\nPredictions using random forest:")
-print("True labels: ", list(y_test[:15]))
-print("Predicted labels: ", list(y_pred_random_forest[:15]))
+# Print Confusion matrix and classification report for Random Forest Classifier
+cm = confusion_matrix(y_test, y_pred_random_forest)
+plt.figure(figsize=(8, 8))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.title('Confusion matrix of the Random Forest classifier')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+plt.show()
+print(classification_report(y_test, y_pred_random_forest))
