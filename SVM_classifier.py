@@ -1,15 +1,13 @@
-from sklearn.svm import SVC
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
-import pandas as pd
-
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 # Read the filtered CSV file
-data = pd.read_csv('Dataset/filtered.csv')
+data = pd.read_csv('Dataset/balanced.csv')
 
 # Define the features and target columns
 features = data.drop(columns=['BRCA_subtype'])
@@ -40,3 +38,24 @@ svc_cv.fit(X_train, y_train)
 # Print the tuned parameters and score
 print("Tuned SVC Parameters: {}".format(svc_cv.best_params_))
 print("Best score is {}".format(svc_cv.best_score_))
+
+# Predict the labels
+y_pred = svc_cv.predict(X_test)
+
+# Print the accuracy
+print("Accuracy: {}".format(accuracy_score(y_test, y_pred)))
+
+# Plot the confusion matrix and save it to a file
+plot_confusion_matrix(svc_cv, X_test, y_test, cmap=plt.cm.Oranges, values_format='.0f')
+plt.title('Confusion Matrix')
+plt.savefig('confusion_matrix_svm.jpg')
+plt.show()
+
+# Predict the NanSet
+nan_data = pd.read_csv('Dataset/NanSet.csv')
+nan_features = nan_data.select_dtypes(include=[np.number])
+nan_scaled_features = scaler.transform(nan_features)
+nan_predictions = svc_cv.predict(nan_scaled_features)
+
+# Print the predictions
+print("Predictions for NanSet: ", nan_predictions)

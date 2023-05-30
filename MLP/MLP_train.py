@@ -31,10 +31,18 @@ def calculate_loss(loader, model):
     model.eval()
     with torch.no_grad():
         for features, labels in loader:
+            features = features.to(device)
+            labels = labels.to(device)
             outputs = model(features)
             loss = criterion(outputs, labels)
             total_loss += loss.item()
     return total_loss / len(loader)
+
+# Detect if we have a GPU available
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+if torch.cuda.device_count() > 1:
+  print("Let's use", torch.cuda.device_count(), "GPUs!")
 
 # Load and process data
 data = pd.read_csv(CSV_FILE_PATH)
@@ -68,6 +76,10 @@ for LEARNING_RATE in LEARNING_RATES:
     for BATCH_SIZE in BATCH_SIZES:
         # Model instantiation
         model = MLP(input_size, output_size)
+        if torch.cuda.device_count() > 1:
+            model = nn.DataParallel(model)
+        model = model.to(device)
+        
         criterion = nn.CrossEntropyLoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
@@ -82,6 +94,9 @@ for LEARNING_RATE in LEARNING_RATES:
         for epoch in range(NUM_EPOCHS):
             model.train()
             for i, (inputs, labels) in enumerate(train_loader):
+                inputs = inputs.to(device)
+                labels = labels.to(device)
+                
                 outputs = model(inputs)
                 loss = criterion(outputs, labels)
 
@@ -126,10 +141,13 @@ y_pred = []
 
 with torch.no_grad():
     for features, labels in test_loader:
+        features = features.to(device)
+        labels = labels.to(device)
+        
         outputs = model(features)
         _, predicted = torch.max(outputs.data, 1)
-        y_true.extend(labels.numpy().tolist())
-        y_pred.extend(predicted.numpy().tolist())
+        y_true.extend(labels.cpu().numpy().tolist())
+        y_pred.extend(predicted.cpu().numpy().tolist())
 
 print(f'Accuracy: {accuracy_score(y_true, y_pred)}')
 print(f'Confusion Matrix: \n{confusion_matrix(y_true, y_pred)}')

@@ -5,10 +5,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-import seaborn as sns
 from sklearn.model_selection import RandomizedSearchCV
+import seaborn as sns
 
-# Read the filtered CSV file
+# Read the balanced CSV file
 data = pd.read_csv('Dataset/balanced.csv')
 
 # Define the features and target columns
@@ -44,10 +44,6 @@ random_search = RandomizedSearchCV(estimator=rf, param_distributions=param_dist,
 # Fit the randomized search model to the data
 random_search.fit(X_train, y_train)
 
-# Print the complete results
-for mean_test_score, params in zip(random_search.cv_results_["mean_test_score"], random_search.cv_results_["params"]):
-    print(f"Mean test score: {mean_test_score:.3f} for parameters {params}")
-
 # Get the best parameters
 best_params = random_search.best_params_
 print(f'\nBest parameters: {best_params}')
@@ -67,9 +63,16 @@ print(f'\nAccuracy of random forest classifier: {accuracy_random_forest:.2f}')
 # Print Confusion matrix and classification report for Random Forest Classifier
 cm = confusion_matrix(y_test, y_pred_random_forest)
 plt.figure(figsize=(8, 8))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+sns.heatmap(cm, annot=True, fmt='d', cmap='Oranges')
 plt.title('Confusion matrix of the Random Forest classifier')
 plt.ylabel('Actual')
 plt.xlabel('Predicted')
+plt.savefig('confusion_matrix_random_forest.jpg')
 plt.show()
 print(classification_report(y_test, y_pred_random_forest))
+
+# Load the NanSet and perform the predictions
+nan_set = pd.read_csv('Dataset/NanSet.csv')
+nan_set_features = scaler.transform(nan_set.select_dtypes(include=[np.number]))
+nan_predictions = random_forest.predict(nan_set_features)
+print("Predictions for the NanSet are: ", nan_predictions)
