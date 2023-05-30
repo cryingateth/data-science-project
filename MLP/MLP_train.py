@@ -15,7 +15,7 @@ from Dataset import BRCA_Dataset
 CSV_FILE_PATH = 'Dataset/balanced.csv'
 TARGET_COLUMN = 'BRCA_subtype'
 TEST_SIZE = 0.3
-VALIDATION_TEST_SIZE = 0.5
+VALIDATION_TEST_SIZE = 0.2
 RANDOM_STATE = 42
 LEARNING_RATE = 0.001
 BATCH_SIZE = 64
@@ -108,3 +108,25 @@ for epoch in range(NUM_EPOCHS):
 
 # Load best model weights
 model.load_state_dict(best_model_wts)
+
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Load best model weights
+model.load_state_dict(best_model_wts)
+
+# Evaluation
+model.eval()
+y_true = []
+y_pred = []
+
+with torch.no_grad():
+    for features, labels in test_loader:
+        outputs = model(features)
+        _, predicted = torch.max(outputs.data, 1)
+        y_true.extend(labels.numpy().tolist())
+        y_pred.extend(predicted.numpy().tolist())
+
+print(f'Accuracy: {accuracy_score(y_true, y_pred)}')
+print(f'Confusion Matrix: \n{confusion_matrix(y_true, y_pred)}')
+print(f'Classification Report: \n{classification_report(y_true, y_pred)}')
+
