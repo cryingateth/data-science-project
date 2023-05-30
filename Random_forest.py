@@ -9,7 +9,7 @@ import seaborn as sns
 from sklearn.model_selection import RandomizedSearchCV
 
 # Read the filtered CSV file
-data = pd.read_csv('Dataset/filtered.csv')
+data = pd.read_csv('Dataset/balanced.csv')
 
 # Define the features and target columns
 features = data.drop(columns=['BRCA_subtype'])

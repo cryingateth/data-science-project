@@ -8,7 +8,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
 # Read the filtered CSV file
-data = pd.read_csv('Dataset/filtered.csv')
+data = pd.read_csv('Dataset/balanced.csv')
 
 # Define the features and target columns
 features = data.drop(columns=['BRCA_subtype'])
