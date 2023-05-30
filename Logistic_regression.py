@@ -47,16 +47,29 @@ plt.ylabel('Actual')
 plt.xlabel('Predicted')
 
 # Save the figure
-plt.savefig('confusion_matrix.jpg')
-
-plt.show()
+plt.savefig('confusion_matrix_lr.jpg')
 print(classification_report(y_test, y_pred_log_reg))
 
-# Predict the NanSet
+# Read the new CSV file
 nan_data = pd.read_csv('Dataset/NanSet.csv')
-nan_features = nan_data.select_dtypes(include=[np.number])
-nan_scaled_features = scaler.transform(nan_features)
-nan_predictions = log_reg.predict(nan_scaled_features)
 
-# Print the predictions
-print("Predictions for NanSet: ", nan_predictions)
+# Define the features and target columns for NanSet.csv, assuming they have the same column names
+nan_features = nan_data.drop(columns=['BRCA_subtype'])
+
+# Remove non-numerical features
+numerical_nan_features = nan_features.select_dtypes(include=[np.number])
+nan_target = nan_data['BRCA_subtype']
+
+# Standardize the feature matrix for NanSet.csv
+nan_scaled_features = scaler.transform(numerical_nan_features)  # Notice use of transform instead of fit_transform
+
+# Predict the labels for NanSet.csv
+nan_pred_log_reg = log_reg.predict(nan_scaled_features)
+
+# Print the count of predicted instances for each class
+unique_classes, counts = np.unique(nan_pred_log_reg, return_counts=True)
+for cls, count in zip(unique_classes, counts):
+    print(f"Predicted instances for class {cls}: {count}")
+
+
+
