@@ -13,7 +13,7 @@ from Architecture import MLP
 from Dataset import BRCA_Dataset
 
 # Constants
-CSV_FILE_PATH = 'Dataset/balanced.csv'
+CSV_FILE_PATH = '../Dataset/balanced.csv'
 TARGET_COLUMN = 'BRCA_subtype'
 TEST_SIZE = 0.3
 VALIDATION_TEST_SIZE = 0.2
