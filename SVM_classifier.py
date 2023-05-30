@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, plot_confusion_matrix
 
 # Read the filtered CSV file
 data = pd.read_csv('Dataset/balanced.csv')
