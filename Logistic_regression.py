@@ -6,9 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import seaborn as sns
-
-
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import RandomizedSearchCV
 
 # Read the filtered CSV file
 data = pd.read_csv('Dataset/filtered.csv')
@@ -27,35 +25,24 @@ scaled_features = scaler.fit_transform(numerical_features)
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(scaled_features, target, test_size=0.2, random_state=42)
 
-# Initial setting
-best_score = -np.inf
-best_max_iter = None
+# Create a logistic regression model
+log_reg = LogisticRegression()
 
-# For different number of iterations
-for max_iter in range(100, 10000, 100):
-    # Create a logistic regression model
-    log_reg = LogisticRegression(max_iter=max_iter)
-    
-    # Perform cross-validation
-    scores = cross_val_score(log_reg, X_train, y_train, cv=5, scoring='neg_log_loss')
+# Define the parameter distribution
+param_dist = {'max_iter': range(100, 10000, 100)}
 
-    # Calculate the mean score
-    mean_score = np.mean(scores)
+# Perform randomized search
+random_search = RandomizedSearchCV(log_reg, param_distributions=param_dist, 
+                                   n_iter=20, scoring='neg_log_loss', cv=5, 
+                                   random_state=42, n_jobs=-1, verbose=3)
 
-    # If the score is better than the current best score, update the best score and best max_iter
-    if mean_score > best_score:
-        best_score = mean_score
-        best_max_iter = max_iter
+random_search.fit(X_train, y_train)
 
 # Print the best number of iterations
-print(f'Best max_iter: {best_max_iter}')
-
-# Train the logistic regression model with the best number of iterations
-log_reg = LogisticRegression(max_iter=best_max_iter)
-log_reg.fit(X_train, y_train)
+print(f'Best max_iter: {random_search.best_params_["max_iter"]}')
 
 # Predict the test set labels using logistic regression
-y_pred_log_reg = log_reg.predict(X_test)
+y_pred_log_reg = random_search.predict(X_test)
 
 # Calculate the accuracy of the logistic regression model
 accuracy_log_reg = accuracy_score(y_test, y_pred_log_reg)
