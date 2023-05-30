@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, confusion_matrix, plot_confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 # Read the filtered CSV file
 data = pd.read_csv('Dataset/balanced.csv')
@@ -45,9 +46,17 @@ y_pred = svc_cv.predict(X_test)
 # Print the accuracy
 print("Accuracy: {}".format(accuracy_score(y_test, y_pred)))
 
-# Plot the confusion matrix and save it to a file
-plot_confusion_matrix(svc_cv, X_test, y_test, cmap=plt.cm.Oranges, values_format='.0f')
+# Compute the confusion matrix
+conf_mat = confusion_matrix(y_test, y_pred)
+
+# Create a heatmap
+plt.figure(figsize=(10,7))
+sns.heatmap(conf_mat, annot=True, cmap='Blues', fmt='d')
 plt.title('Confusion Matrix')
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+
+# Save the plot to a file
 plt.savefig('confusion_matrix_svm.jpg')
 plt.show()
 
