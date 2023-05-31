@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
-from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import classification_report
+
 
 # Read the filtered CSV file
 data = pd.read_csv('Dataset/balanced.csv')
@@ -24,24 +26,27 @@ scaled_features = scaler.fit_transform(numerical_features)
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(scaled_features, target, test_size=0.2, random_state=42)
 
-# Define the hyperparameters for SVC
-param_dist = {"C": [0.1, 1, 10, 100], "gamma": [1, 0.1, 0.01, 0.001], "kernel": ['linear', 'poly', 'rbf']}
+# Define the hyperparameters for DecisionTree
+param_dist = {"max_depth": [1,2,3,4,5,6,7,8,9,10,None], "min_samples_leaf": [1,2,3,4,5,6,7,8,9,10], "criterion": ["gini", "entropy"]}
 
-# Instantiate a SVC classifier
-svc = SVC()
+# Instantiate a Decision Tree classifier
+tree = DecisionTreeClassifier()
 
 # Instantiate the RandomizedSearchCV object
-svc_cv = RandomizedSearchCV(svc, param_dist, cv=5)
+tree_cv = RandomizedSearchCV(tree, param_dist, cv=5)
 
 # Fit it to the data
-svc_cv.fit(X_train, y_train)
+tree_cv.fit(X_train, y_train)
 
 # Print the tuned parameters and score
-print("Tuned SVC Parameters: {}".format(svc_cv.best_params_))
-print("Best score is {}".format(svc_cv.best_score_))
+print("Tuned Decision Tree Parameters: {}".format(tree_cv.best_params_))
+print("Best score is {}".format(tree_cv.best_score_))
 
 # Predict the labels
-y_pred = svc_cv.predict(X_test)
+y_pred = tree_cv.predict(X_test)
+
+print(classification_report(y_test, y_pred))
+
 
 # Print the accuracy
 print("Accuracy: {}".format(accuracy_score(y_test, y_pred)))
@@ -66,7 +71,7 @@ nan_data = nan_data.drop(columns=['BRCA_subtype'])
 
 nan_features = nan_data.select_dtypes(include=[np.number])
 nan_scaled_features = scaler.transform(nan_features)
-nan_predictions = svc_cv.predict(nan_scaled_features)
+nan_predictions = tree_cv.predict(nan_scaled_features)
 
 # Print the predictions
 print("Predictions for NanSet: ", nan_predictions)
