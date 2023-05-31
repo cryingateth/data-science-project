@@ -76,6 +76,7 @@ nan_data = pd.read_csv('Dataset/NanSet.csv')
 
 # Define the features for NanSet.csv, assuming they have the same column names
 nan_features = nan_data.select_dtypes(include=[np.number])
+nan_features = nan_data.drop(columns=['BRCA_subtype']) if 'BRCA_subtype' in nan_data.columns else nan_data
 
 # Standardize the feature matrix for NanSet.csv
 nan_scaled_features = scaler.transform(nan_features)  # Notice use of transform instead of fit_transform
