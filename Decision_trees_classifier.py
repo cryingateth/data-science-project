@@ -57,7 +57,7 @@ plt.ylabel('Actual label')
 plt.xlabel('Predicted label')
 
 # Save the plot to a file
-plt.savefig('confusion_matrix_svm.jpg')
+plt.savefig('confusion_matrix_dec_trees.jpg')
 plt.show()
 
 # Predict the NanSet
