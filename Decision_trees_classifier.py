@@ -62,6 +62,8 @@ plt.show()
 
 # Predict the NanSet
 nan_data = pd.read_csv('Dataset/NanSet.csv')
+nan_data = nan_data.drop(columns=['BRCA_subtype'])
+
 nan_features = nan_data.select_dtypes(include=[np.number])
 nan_scaled_features = scaler.transform(nan_features)
 nan_predictions = svc_cv.predict(nan_scaled_features)
