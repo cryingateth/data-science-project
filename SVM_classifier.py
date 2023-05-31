@@ -60,16 +60,22 @@ plt.xlabel('Predicted label')
 plt.savefig('confusion_matrix_svm.jpg')
 plt.show()
 
-# Predict the NanSet
+# Read the new CSV file
 nan_data = pd.read_csv('Dataset/NanSet.csv')
-nan_features = nan_data.select_dtypes(include=[np.number])
-nan_scaled_features = scaler.transform(nan_features)
-nan_predictions = svc_cv.predict(nan_scaled_features)
 
-# Print the predictions
-print("Predictions for NanSet: ", nan_predictions)
+# Define the features for NanSet.csv, assuming it has the same column names
+nan_features = nan_data.drop(columns=['BRCA_subtype']) if 'BRCA_subtype' in nan_data.columns else nan_data
 
-# Print the count of predictions for each class
-unique_classes, counts = np.unique(nan_predictions, return_counts=True)
+# Remove non-numerical features
+numerical_nan_features = nan_features.select_dtypes(include=[np.number])
+
+# Standardize the feature matrix for NanSet.csv
+nan_scaled_features = scaler.transform(numerical_nan_features)  # Notice use of transform instead of fit_transform
+
+# Predict the labels for NanSet.csv
+nan_pred_svc = svc_cv.predict(nan_scaled_features)
+
+# Print the count of predicted instances for each class
+unique_classes, counts = np.unique(nan_pred_svc, return_counts=True)
 for cls, count in zip(unique_classes, counts):
     print(f"Predicted instances for class {cls}: {count}")
