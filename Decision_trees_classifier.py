@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
+import seaborn as sns
 
 # Read the filtered CSV file
 data = pd.read_csv('Dataset/balanced.csv')
@@ -49,30 +50,36 @@ print("Tuned Decision Tree Parameters: {}".format(tree_cv.best_params_))
 print("Best score is {}".format(tree_cv.best_score_))
 
 # Predict the labels
-y_score = tree_cv.predict(X_test)
+y_pred = tree_cv.predict(X_test)
 
-# Plot the confusion matrix and save it to a file
-plot_confusion_matrix(tree_cv, X_test, y_test.argmax(axis=1), cmap=plt.cm.Oranges, values_format='.0f')
+# Calculate the accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"\nAccuracy: {accuracy:.2f}\n")
+
+# Generate confusion matrix and classification report
+cm = confusion_matrix(y_test.argmax(axis=1), y_pred.argmax(axis=1))
+
+plt.figure(figsize=(8, 8))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Oranges')
 plt.title('Confusion Matrix')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
 plt.savefig('confusion_matrix.jpg')
 plt.show()
 
+print(classification_report(y_test.argmax(axis=1), y_pred.argmax(axis=1)))
 
 # Read the NanSet CSV file
 nan_data = pd.read_csv('Dataset/NanSet.csv')
 
 # Define the features
-nan_features = nan_data.drop(columns=['BRCA_subtype'])  # assuming the target column is 'BRCA_subtype'
-
-# Remove non-numerical features
-nan_numerical_features = nan_features.select_dtypes(include=[np.number])
+nan_features = nan_data.select_dtypes(include=[np.number])
 
 # Use the same scaler to standardize the nan dataset features
-nan_scaled_features = scaler.transform(nan_numerical_features)
+nan_scaled_features = scaler.transform(nan_features)
 
 # Predict the labels for NanSet data
 nan_predictions = tree_cv.predict(nan_scaled_features)
 
 # Print the predictions
 print("Predictions for NanSet data: ", nan_predictions)
-
