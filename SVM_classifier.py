@@ -51,7 +51,7 @@ conf_mat = confusion_matrix(y_test, y_pred)
 
 # Create a heatmap
 plt.figure(figsize=(10,7))
-sns.heatmap(conf_mat, annot=True, cmap='Blues', fmt='d')
+sns.heatmap(conf_mat, annot=True, cmap='Oranges', fmt='d')
 plt.title('Confusion Matrix')
 plt.ylabel('Actual label')
 plt.xlabel('Predicted label')
@@ -68,3 +68,8 @@ nan_predictions = svc_cv.predict(nan_scaled_features)
 
 # Print the predictions
 print("Predictions for NanSet: ", nan_predictions)
+
+# Print the count of predictions for each class
+unique_classes, counts = np.unique(nan_predictions, return_counts=True)
+for cls, count in zip(unique_classes, counts):
+    print(f"Predicted instances for class {cls}: {count}")
