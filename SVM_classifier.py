@@ -5,7 +5,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 # Read the filtered CSV file
 data = pd.read_csv('Dataset/balanced.csv')
@@ -45,6 +45,9 @@ y_pred = svc_cv.predict(X_test)
 
 # Print the accuracy
 print("Accuracy: {}".format(accuracy_score(y_test, y_pred)))
+
+# Print the classification report
+print(classification_report(y_test, y_pred))
 
 # Compute the confusion matrix
 conf_mat = confusion_matrix(y_test, y_pred)
