@@ -152,3 +152,35 @@ with torch.no_grad():
 print(f'Accuracy: {accuracy_score(y_true, y_pred)}')
 print(f'Confusion Matrix: \n{confusion_matrix(y_true, y_pred)}')
 print(f'Classification Report: \n{classification_report(y_true, y_pred)}')
+
+# Load and process nan_data
+nan_data = pd.read_csv('../Dataset/NanSet.csv')
+
+# Assuming it has the same column names
+nan_features = nan_data if TARGET_COLUMN not in nan_data.columns else nan_data.drop(columns=[TARGET_COLUMN])
+
+numerical_nan_features = nan_features.select_dtypes(include=[np.number])
+
+# Standardize the feature matrix for NanSet.csv
+nan_scaled_features = scaler.transform(numerical_nan_features)  # Notice use of transform instead of fit_transform
+
+# Convert scaled features to tensor
+nan_features_tensor = torch.Tensor(nan_scaled_features)
+
+# Create DataLoader
+nan_loader = DataLoader(nan_features_tensor, batch_size=BATCH_SIZE, shuffle=False)
+
+# Predict labels for NanSet.csv
+nan_preds = []
+with torch.no_grad():
+    for features in nan_loader:
+        features = features.to(device)
+        outputs = model(features)
+        _, predicted = torch.max(outputs.data, 1)
+        nan_preds.extend(predicted.cpu().numpy().tolist())
+
+# Print the count of predicted instances for each class
+unique_classes, counts = np.unique(nan_preds, return_counts=True)
+for cls, count in zip(unique_classes, counts):
+    print(f"Predicted instances for class {cls}: {count}")
+
