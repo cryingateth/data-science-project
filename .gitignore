@@ -2,3 +2,4 @@
 best_model.pt
 Theory_material
 MLP/__pycache__
+*.pyc

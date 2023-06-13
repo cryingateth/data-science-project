@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, cohen_kappa_score
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, cohen_kappa_score, roc_auc_score
 import seaborn as sns
 
 # Read the filtered CSV file
-data = pd.read_csv('../Dataset/filtered.csv')
+data = pd.read_csv('Dataset/filtered.csv')
 
 # Define the features and target columns
 features = data.drop(columns=['BRCA_subtype'])
@@ -57,11 +57,11 @@ plt.ylabel('Actual')
 plt.xlabel('Predicted')
 
 # Save the figure
-plt.savefig('../Confusion_matrix/confusion_matrix_lr.jpg')
+plt.savefig('Confusion_matrix/confusion_matrix_lr.jpg')
 print(classification_report(y_test, y_pred_log_reg))
 
 # Read the new CSV file
-nan_data = pd.read_csv('../Dataset/NanSet.csv')
+nan_data = pd.read_csv('Dataset/NanSet.csv')
 
 
 print(nan_data.head(10))
@@ -90,6 +90,4 @@ print(nan_pred_log_reg[0:10])
 
 print("-----------------")
 coh_kap = cohen_kappa_score(y_test, y_pred_log_reg)
-print(coh_kap)
-
-
+print("Cohen's kappa:", coh_kap)

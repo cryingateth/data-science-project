@@ -6,14 +6,14 @@ import torch.nn as nn
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report,cohen_kappa_score
 import matplotlib.pyplot as plt
 
 from Architecture import MLP
 from Dataset import BRCA_Dataset
 
 # Constants
-CSV_FILE_PATH = '../Dataset/balanced.csv'
+CSV_FILE_PATH = '../Dataset/filtered.csv'
 TARGET_COLUMN = 'BRCA_subtype'
 TEST_SIZE = 0.3
 VALIDATION_TEST_SIZE = 0.2
@@ -22,8 +22,8 @@ NUM_EPOCHS = 50
 MODEL_PATH = 'best_model.pt'
 
 # Possible hyperparameters
-LEARNING_RATES = [0.1, 0.01, 0.001]
-BATCH_SIZES = [32, 64, 128]
+LEARNING_RATES = [0.001]
+BATCH_SIZES = [128]
 
 # Function to calculate loss
 def calculate_loss(loader, model):
@@ -58,14 +58,25 @@ scaled_features = scaler.fit_transform(numerical_features)
 X_train, X_val_test, y_train, y_val_test = train_test_split(scaled_features, target, test_size=TEST_SIZE, random_state=RANDOM_STATE)
 X_val, X_test, y_val, y_test = train_test_split(X_val_test, y_val_test, test_size=VALIDATION_TEST_SIZE, random_state=RANDOM_STATE)
 
+
+#need to perform oversampler for balancing data set
+from imblearn.over_sampling import RandomOverSampler
+from collections import Counter
+
+ros = RandomOverSampler(random_state=42)
+X_train_ros, y_train_ros = ros.fit_resample(X_train, y_train)
+
+#check that is now balanced
+print(sorted(Counter(y_train_ros).items()))
+
 # Prepare data loaders
-train_dataset = BRCA_Dataset(X_train, y_train)
+train_dataset = BRCA_Dataset(X_train_ros, y_train_ros)
 val_dataset = BRCA_Dataset(X_val, y_val)
 test_dataset = BRCA_Dataset(X_test, y_test)
 
 # Model instantiation
 input_size = X_train.shape[1]
-output_size = len(np.unique(y_train))
+output_size = len(np.unique(y_train_ros))
 
 best_model_wts = None
 best_loss = np.inf
@@ -179,8 +190,12 @@ with torch.no_grad():
         _, predicted = torch.max(outputs.data, 1)
         nan_preds.extend(predicted.cpu().numpy().tolist())
 
+print(nan_preds[0:10])
 # Print the count of predicted instances for each class
 unique_classes, counts = np.unique(nan_preds, return_counts=True)
 for cls, count in zip(unique_classes, counts):
     print(f"Predicted instances for class {cls}: {count}")
 
+print("-----------------")
+coh_kap = cohen_kappa_score(y_test, y_pred)
+print(coh_kap)
