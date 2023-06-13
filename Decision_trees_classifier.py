@@ -5,12 +5,12 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, cohen_kappa_score
 from sklearn.metrics import classification_report
 
 
 # Read the filtered CSV file
-data = pd.read_csv('../Dataset/filtered.csv')
+data = pd.read_csv('Dataset/filtered.csv')
 
 # Define the features and target columns
 features = data.drop(columns=['BRCA_subtype'])
@@ -37,7 +37,9 @@ X_train_ros, y_train_ros = ros.fit_resample(X_train, y_train)
 print(sorted(Counter(y_train_ros).items()))
 
 # Define the hyperparameters for DecisionTree
-param_dist = {"max_depth": [1,2,3,4,5,6,7,8,9,10,None], "min_samples_leaf": [1,2,3,4,5,6,7,8,9,10], "criterion": ["gini", "entropy"]}
+#param_dist = {"max_depth": [1,2,3,4,5,6,7,8,9,10,None], "min_samples_leaf": [1,2,3,4,5,6,7,8,9,10], "criterion": ["gini", "entropy"]}
+param_dist = {"max_depth": [6], "min_samples_leaf": [4], "criterion": ["entropy"]}
+
 
 # Instantiate a Decision Tree classifier
 tree = DecisionTreeClassifier()
@@ -72,11 +74,11 @@ plt.ylabel('Actual label')
 plt.xlabel('Predicted label')
 
 # Save the plot to a file
-plt.savefig('../Confusion_matrix/confusion_matrix_dec_trees.jpg')
+plt.savefig('Confusion_matrix/confusion_matrix_dec_trees.jpg')
 plt.show()
 
 # Predict the NanSet
-nan_data = pd.read_csv('../Dataset/NanSet.csv')
+nan_data = pd.read_csv('Dataset/NanSet.csv')
 nan_data = nan_data.drop(columns=['BRCA_subtype'])
 
 nan_features = nan_data.select_dtypes(include=[np.number])
@@ -90,3 +92,11 @@ print("Predictions for NanSet: ", nan_predictions)
 unique_classes, counts = np.unique(nan_predictions, return_counts=True)
 for cls, count in zip(unique_classes, counts):
     print(f"Predicted instances for class {cls}: {count}")
+
+
+print(nan_predictions[0:10])
+
+
+print("-----------------")
+coh_kap = cohen_kappa_score(y_test, y_pred)
+print(coh_kap)
