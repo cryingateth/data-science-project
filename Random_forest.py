@@ -79,9 +79,12 @@ precision = precision_score(y_test, y_pred_random_forest, average = 'macro')
 f1 = f1_score(y_test, y_pred_random_forest, average = 'macro')
 recall = recall_score(y_test, y_pred_random_forest, average = 'macro')
 
-print("accurc", accuracy_random_forest, 'precision', precision, 'f1 =', f1, 'reca', recall)
+print("accurcy", accuracy_random_forest, 'precision', precision, 'f1 =', f1, 'recall', recall)
 
-print('-----------------------')
+#Cohen's kappa score
+coh_kap = cohen_kappa_score(y_test, y_pred_random_forest)
+print("Cohen's kappa:", coh_kap)
+
 
 print(f'\nAccuracy of random forest classifier: {accuracy_random_forest:.2f}')
 
@@ -112,14 +115,10 @@ nan_scaled_features = scaler.transform(numerical_nan_features)  # Notice use of 
 # Predict the labels for NanSet.csv using the trained Random Forest Classifier
 nan_pred_random_forest = random_forest.predict(nan_scaled_features)
 
-print(nan_pred_random_forest[0:10])
+print("First 10 values of BRCA subtypes for patients:", nan_pred_random_forest[0:10])
 
 # Print the count of predicted instances for each class
 unique_classes, counts = np.unique(nan_pred_random_forest, return_counts=True)
 for cls, count in zip(unique_classes, counts):
     print(f"Predicted instances for class {cls}: {count}")
 
-
-print("-----------------")
-coh_kap = cohen_kappa_score(y_test, y_pred_random_forest)
-print(coh_kap)
