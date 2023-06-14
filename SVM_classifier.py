@@ -59,6 +59,11 @@ print("Accuracy: {}".format(accuracy_score(y_test, y_pred)))
 # Print the classification report
 print(classification_report(y_test, y_pred))
 
+
+#print cohen kappa score
+coh_kap = cohen_kappa_score(y_test, y_pred)
+print("Cohen's Kappa:", coh_kap)
+
 # Compute the confusion matrix
 conf_mat = confusion_matrix(y_test, y_pred)
 
@@ -93,9 +98,6 @@ unique_classes, counts = np.unique(nan_pred_svc, return_counts=True)
 for cls, count in zip(unique_classes, counts):
     print(f"Predicted instances for class {cls}: {count}")
 
-print(nan_pred_svc[0:10])
+print("First 10 subtype values for patients:", nan_pred_svc[0:10])
 
 
-print("-----------------")
-coh_kap = cohen_kappa_score(y_test, y_pred)
-print(coh_kap)
