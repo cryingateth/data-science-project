@@ -63,6 +63,11 @@ print(classification_report(y_test, y_pred))
 # Print the accuracy
 print("Accuracy: {}".format(accuracy_score(y_test, y_pred)))
 
+#Cohen's kappa
+print("-----------------")
+coh_kap = cohen_kappa_score(y_test, y_pred)
+print(coh_kap)
+
 # Compute the confusion matrix
 conf_mat = confusion_matrix(y_test, y_pred)
 
@@ -94,9 +99,4 @@ for cls, count in zip(unique_classes, counts):
     print(f"Predicted instances for class {cls}: {count}")
 
 
-print(nan_predictions[0:10])
-
-
-print("-----------------")
-coh_kap = cohen_kappa_score(y_test, y_pred)
-print(coh_kap)
+print("First 10 BRCA subtypes of missing patients:", nan_predictions[0:10])

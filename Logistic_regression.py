@@ -48,6 +48,13 @@ accuracy_log_reg = accuracy_score(y_test, y_pred_log_reg)
 
 print(f'Accuracy of logistic regression: {accuracy_log_reg:.2f}')
 
+print(classification_report(y_test, y_pred_log_reg))
+
+#Cohen's kappa
+print("-----------------")
+coh_kap = cohen_kappa_score(y_test, y_pred_log_reg)
+print("Cohen's kappa:", coh_kap)
+
 # Print Confusion matrix and classification report
 cm = confusion_matrix(y_test, y_pred_log_reg)
 fig, ax = plt.subplots(figsize=(8, 8))
@@ -58,7 +65,6 @@ plt.xlabel('Predicted')
 
 # Save the figure
 plt.savefig('Confusion_matrix/confusion_matrix_lr.jpg')
-print(classification_report(y_test, y_pred_log_reg))
 
 # Read the new CSV file
 nan_data = pd.read_csv('Dataset/NanSet.csv')
@@ -84,10 +90,8 @@ for cls, count in zip(unique_classes, counts):
     print(f"Predicted instances for class {cls}: {count}")
 
 
-print(nan_pred_log_reg[0:10])
+print("First 10 values for predicted brca subtypes of missing patients:", nan_pred_log_reg[0:10])
 
 
 
-print("-----------------")
-coh_kap = cohen_kappa_score(y_test, y_pred_log_reg)
-print("Cohen's kappa:", coh_kap)
+
