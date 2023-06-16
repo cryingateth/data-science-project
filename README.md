@@ -14,6 +14,6 @@ Decision_trees.py performs the decision tree using the filtered.csv dataset. Ove
 Random_forest.py performs the random forest using the filtered.csv dataset. Oversampling is done after the split. Evaluation metrics are also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the random forest model.\
 SVM.py performs the SVM using the filtered.csv dataset. Oversampling is done after the split. Evaluation metrics are also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the SVM model.\
 
-In the MLP folder, architecture.py contains the structure of neural network (layers), and Dataset.py contains the processing of the data before being added in the MLP model. 
+In the MLP folder, architecture.py contains the structure of neural network (layers), and Dataset.py contains the preprocessing of the data before being added in the MLP model. 
 MLP_train.py performs MLP on the filtered dataset using the architecture.py and the Dataset.py. Oversampling is done after the split. Evaluation metrics are  also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the MLP model. 
 
