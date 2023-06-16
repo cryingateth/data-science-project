@@ -9,11 +9,11 @@ Combined_Dataset.py fuses the TCGA-BRCA gene expression (dataset.csv) table toge
 Filtered_Dataset.py removes all the NaN values from combined_dataset.csv and saves the new dataframe as filtered.csv. The removed NaN values are also saved in a new file (NanSet.csv).
 
 ## Model:
-Logistic_regression.py performs the logistic regression using the filtered.csv dataset.\
-Decision_trees.py performs the decision tree using the filtered.csv dataset.\
-Random_forest.py performs the random forest using the filtered.csv dataset.\
-SVM.py performs the SVM using the filtered.csv dataset.\
+Logistic_regression.py performs the logistic regression using the filtered.csv dataset. Oversampling is done after the split. Evaluation metrics are also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the logistic regression model.\
+Decision_trees.py performs the decision tree using the filtered.csv dataset. Oversampling is done after the split. Evaluation metrics are also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the decision tree model.\
+Random_forest.py performs the random forest using the filtered.csv dataset. Oversampling is done after the split. Evaluation metrics are also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the random forest model.\
+SVM.py performs the SVM using the filtered.csv dataset. Oversampling is done after the split. Evaluation metrics are also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the SVM model.\
 
-In the MLP folder, architecture.py does something, and Dataset.py does something else that is needed in MLP_train.py.
-MLP_train.py performs MLP on the filtered dataset
+In the MLP folder, architecture.py contains the structure of neural network (layers), and Dataset.py contains the processing of the data before being added in the MLP model. 
+MLP_train.py performs MLP on the filtered dataset using the architecture.py and the Dataset.py. Oversampling is done after the split. Evaluation metrics are  also calculated. Labels' prediction for the NaNs is done using the NanSet.csv and the MLP model. 
 
