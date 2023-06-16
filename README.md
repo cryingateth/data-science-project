@@ -1,6 +1,13 @@
 # data-science-project
 Group project
 
+
+Data description: 
+
+Data preprocessing
+
+Models:
+
 Combined_Dataset.py fuses the TCGA-BRCA gene expression table together with the outcome table and saves the new dataframe as combined_dataset.csv
 Filtered_Dataset.py removes all the NaN values from combined_dataset.csv and saves the new dataframe as filtered.csv
 Logistic_regression.py performs the logistic regression using the filtered.csv dataset.
