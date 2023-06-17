@@ -17,6 +17,15 @@ For MLP execution (MLP folder):
 
 8. MLP_train.py
 
+## Required Python packages
+1. pandas (1.5.3)
+2. matplotlib (3.7.1)
+3. seaborn (0.12.2)
+4. numpy (1.23.5)
+5. plotly (5.13.1)
+6. skikit-learn (1.2.2)
+7. torch (2.0.1)
+8. imblearn (0.10.1)
 
 ## Data description
 Dataset_description.py imports the two datasets (dataset.csv and outcome.csv). The shape, the NaN amount, duplicates amount, dtype are calculated for both datasets. The number of patients per BRCA subtypes was also calculated in the outcome set.
