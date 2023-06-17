@@ -28,7 +28,7 @@ For MLP execution (MLP folder):
 8. imblearn (0.10.1)
 
 ## Data description
-Dataset_description.py imports the two datasets (dataset.csv and outcome.csv). The shape, the NaN amount, duplicates amount, dtype are calculated for both datasets. The number of patients per BRCA subtypes was also calculated in the outcome set.
+Dataset_description.py imports the two datasets (dataset.csv and outcome.csv). The shape, the NaN amount, duplicates amount, dtype are calculated for both datasets. The number of patients per BRCA subtypes are also calculated in the outcome set.
 
 ## Data preprocessing
 Combined_Dataset.py fuses the TCGA-BRCA gene expression (dataset.csv) table together with the outcome (outcome.csv) table and saves the new dataframe as combined_dataset.csv\
