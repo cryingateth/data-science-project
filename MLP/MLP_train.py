@@ -210,4 +210,4 @@ for cls, count in zip(unique_classes, counts):
 
 print("-----------------")
 coh_kap = cohen_kappa_score(y_test, y_pred)
-print(coh_kap)
+print("Cohen's kappa:," coh_kap)
