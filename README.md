@@ -2,7 +2,10 @@
 Group project: TCGA
 
 ## Where to save the dataset and outcome table to run the the python codes
-"dataset.csv" and "outcome.csv" need to be saved into a local folder titled "Dataset". The folder "Dataset" needs to be saved into the same folder, where all the python codes are located. All new generated datasets will also be saved into the folder "Dataset".
+"dataset.csv" and "outcome.csv" need to be saved into a local folder titled "Dataset". The folder "Dataset" needs to be saved into the same folder (data-science-project-main), where all the python codes are located. All new generated datasets will also be saved into the folder "Dataset".
+
+## Additional folder
+An additional empty folder should be saved in the folder where the python code is located (data-science-project-main). This folder should be called "Confusion_matrix". This is where the confusion matrices will be saved to after running the code. 
 
 ## Order of code execution 
 1. Dataset_description.py
