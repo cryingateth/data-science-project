@@ -15,7 +15,7 @@ from Architecture import MLP
 from Dataset import BRCA_Dataset
 
 # Constants
-CSV_FILE_PATH = 'Dataset/filtered.csv'
+CSV_FILE_PATH = '../Dataset/filtered.csv'
 TARGET_COLUMN = 'BRCA_subtype'
 TEST_SIZE = 0.3
 VALIDATION_TEST_SIZE = 0.2
@@ -175,9 +175,9 @@ plt.ylabel('Actual')
 plt.xlabel('Predicted')
 
 # Save the figure
-plt.savefig('Confusion_matrix/confusion_matrix_mlp.jpg')
+plt.savefig('../Confusion_matrix/confusion_matrix_mlp.jpg')
 # Load and process nan_data
-nan_data = pd.read_csv('Dataset/NanSet.csv')
+nan_data = pd.read_csv('../Dataset/NanSet.csv')
 
 # Assuming it has the same column names
 nan_features = nan_data if TARGET_COLUMN not in nan_data.columns else nan_data.drop(columns=[TARGET_COLUMN])
@@ -210,4 +210,4 @@ for cls, count in zip(unique_classes, counts):
 
 print("-----------------")
 coh_kap = cohen_kappa_score(y_test, y_pred)
-print("Cohen's kappa:," coh_kap)
+print("Cohen's kappa:", coh_kap)
