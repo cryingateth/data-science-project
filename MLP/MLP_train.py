@@ -8,12 +8,14 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report,cohen_kappa_score
 import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 from Architecture import MLP
 from Dataset import BRCA_Dataset
 
 # Constants
-CSV_FILE_PATH = '../Dataset/filtered.csv'
+CSV_FILE_PATH = 'Dataset/filtered.csv'
 TARGET_COLUMN = 'BRCA_subtype'
 TEST_SIZE = 0.3
 VALIDATION_TEST_SIZE = 0.2
@@ -160,12 +162,22 @@ with torch.no_grad():
         y_true.extend(labels.cpu().numpy().tolist())
         y_pred.extend(predicted.cpu().numpy().tolist())
 
+
 print(f'Accuracy: {accuracy_score(y_true, y_pred)}')
 print(f'Confusion Matrix: \n{confusion_matrix(y_true, y_pred)}')
 print(f'Classification Report: \n{classification_report(y_true, y_pred)}')
 
+cm = confusion_matrix(y_test, y_pred)
+fig, ax = plt.subplots(figsize=(8, 8))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Oranges', ax=ax, yticklabels=['Basal', 'Her2', 'LumA', 'LumB', 'Normal'], xticklabels=['Basal', 'Her2', 'LumA', 'LumB', 'Normal'])
+plt.title('Confusion matrix of the MLP classifier')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+
+# Save the figure
+plt.savefig('Confusion_matrix/confusion_matrix_mlp.jpg')
 # Load and process nan_data
-nan_data = pd.read_csv('../Dataset/NanSet.csv')
+nan_data = pd.read_csv('Dataset/NanSet.csv')
 
 # Assuming it has the same column names
 nan_features = nan_data if TARGET_COLUMN not in nan_data.columns else nan_data.drop(columns=[TARGET_COLUMN])
@@ -198,4 +210,4 @@ for cls, count in zip(unique_classes, counts):
 
 print("-----------------")
 coh_kap = cohen_kappa_score(y_test, y_pred)
-print(coh_kap)
+print("Cohen's kappa:," coh_kap)
